@@ -1,4 +1,4 @@
-{% load static %}
+
 <!doctype html>
 <html lang="ru">
   <head>
@@ -6,21 +6,31 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    {% load static %}
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css" >
-
-
+    <!-- My styles -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
     {% block title %}<title>Привет мир!</title> {% endblock %}
   </head>
-  <body>
+  <body class="bg-light">
     {% block navbar %}
-    <nav class="navbar sticky-top navbar-dark bg-dark ">
-      <div class="container justify-content-start text-align-center">
-        <a href="/" class="nav-brand text-danger">
-          MangaSite
-        </a>
-        <a href="{% url 'manga-list' %}" class="nav-item nav-link" role="button">Манга</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand text-danger" href="{% url 'index'%}">MangaSite</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'manga-list' %}">Список манги</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#">Список ранобэ</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
     {% endblock %}
