@@ -11,3 +11,12 @@ class Manga(models.Model):
     tags = models.ManyToManyField('Tag', verbose_name='Тэги манги')
     raiting = models.DecimalField(max_digits=4, decimal_places=2, verbose_name='Рейтинг манги', default=0, editable=False)
 
+class Author(models.Model):
+    first_name = models.CharField(max_length=30, verbose_name='Имя автора')
+    last_name = models.CharField(max_length=30, verbose_name='Фамилия автора')
+
+class Genre(models.Model):
+    name = models.CharField(max_length=255, verbose_name='Название жанра')
+
+class Tag(models.Model):
+    name = models.CharField(max_length=255, verbose_name='Название тэга')
