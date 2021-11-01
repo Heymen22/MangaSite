@@ -17,7 +17,10 @@ class Manga(models.Model):
 
 
 class MangaChapter(models.Model):
-    chapter_number = models.DecimalField(max_digits=4, decimal_places=0, verbose_name='Номер главы')
+    class Meta:
+        unique_together = ['chapter_number', 'manga']
+
+    chapter_number = models.PositiveIntegerField(verbose_name='Номер главы')
     author = models.ForeignKey('Author', verbose_name='Автор главы', on_delete=models.SET_NULL, null=True)
     manga = models.ForeignKey('Manga', verbose_name='К какой манге принадлежит глава', on_delete=models.CASCADE)
 
@@ -26,7 +29,10 @@ class MangaChapter(models.Model):
 
 
 class MangaChapterPage(models.Model):
-    page_number = models.DecimalField(max_digits=4, decimal_places=0, verbose_name='Номер страницы')
+    class Meta:
+        unique_together = ['page_number', 'chapter']
+
+    page_number = models.PositiveIntegerField(verbose_name='Номер страницы')
     chapter = models.ForeignKey('MangaChapter', verbose_name='К какой главе принадлежит страница',
                                 on_delete=models.CASCADE)
     page_image = models.ImageField(verbose_name='Страница')
