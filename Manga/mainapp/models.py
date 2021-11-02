@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -14,8 +15,6 @@ class Manga(models.Model):
     release_date = models.DateField(verbose_name='Дата выхода манги', blank=True, null=True)
     pub_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='Дата публикации манги на сайте')
     updated_date = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
-    rating = models.DecimalField(max_digits=4, decimal_places=2, verbose_name='Рейтинг манги', default=0,
-                                 editable=False)
 
     def __str__(self):
         return self.name
@@ -74,3 +73,19 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class UserMangaRelation(models.Model):
+    RATE_CHOICES = (
+        (1, 'Ужасно'),
+        (2, 'Плохо'),
+        (3, 'Нормально'),
+        (4, 'Олично'),
+        (5, 'Превосходно'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    manga = models.ForeignKey(Manga, on_delete=models.CASCADE, verbose_name='Манга')
+    is_liked = models.BooleanField(default=False, verbose_name='Лайк')
+    is_favorite = models.BooleanField(default=False, verbose_name='Избранное')
+    rate = models.PositiveSmallIntegerField(choices=RATE_CHOICES, verbose_name='Оценка')
