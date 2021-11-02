@@ -30,6 +30,10 @@ class MangaChapter(models.Model):
     def __str__(self):
         return f'{self.manga.name} Chapter {self.chapter_number}'
 
+    def save(self, *args, **kwargs):
+        self.manga.save()
+        super().save(*args, **kwargs)
+
 
 class MangaChapterPage(models.Model):
     class Meta:
