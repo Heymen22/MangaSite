@@ -9,6 +9,9 @@ class Manga(models.Model):
     preview = models.ImageField(verbose_name='Превью манги')
     genres = models.ManyToManyField('Genre', verbose_name='Жанры манги')
     tags = models.ManyToManyField('Tag', verbose_name='Тэги манги')
+    release_date = models.DateField(verbose_name='Дата выхода манги', blank=True, null=True)
+    pub_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='Дата публикации манги на сайте')
+    updated_date = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
     raiting = models.DecimalField(max_digits=4, decimal_places=2, verbose_name='Рейтинг манги', default=0,
                                   editable=False)
 
