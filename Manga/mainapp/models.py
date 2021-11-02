@@ -1,10 +1,12 @@
 from django.db import models
+from django.urls import reverse
 
 
 # Create your models here.
 class Manga(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название манги')
     description = models.TextField(max_length=1000, verbose_name='Описание манги')
+    slug = models.SlugField(verbose_name='Ссылка', unique=True, db_index=True, max_length=255)
     author = models.ForeignKey('Author', verbose_name='Автор манги', on_delete=models.SET_NULL, null=True)
     preview = models.ImageField(verbose_name='Превью манги')
     genres = models.ManyToManyField('Genre', verbose_name='Жанры манги')
@@ -12,23 +14,27 @@ class Manga(models.Model):
     release_date = models.DateField(verbose_name='Дата выхода манги', blank=True, null=True)
     pub_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='Дата публикации манги на сайте')
     updated_date = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
-    raiting = models.DecimalField(max_digits=4, decimal_places=2, verbose_name='Рейтинг манги', default=0,
-                                  editable=False)
+    rating = models.DecimalField(max_digits=4, decimal_places=2, verbose_name='Рейтинг манги', default=0,
+                                 editable=False)
 
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('manga', kwargs={'manga_slug': self.slug})
+
 
 class MangaChapter(models.Model):
     class Meta:
-        unique_together = ['chapter_number', 'manga']
+        unique_together = ['number', 'manga']
 
-    chapter_number = models.PositiveIntegerField(verbose_name='Номер главы')
+    volume = models.PositiveIntegerField(verbose_name='Номер тома')
+    number = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='Номер главы')
     author = models.ForeignKey('Author', verbose_name='Автор главы', on_delete=models.SET_NULL, null=True)
     manga = models.ForeignKey('Manga', verbose_name='К какой манге принадлежит глава', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.manga.name} Chapter {self.chapter_number}'
+        return f'{self.manga.name} Chapter {self.number}'
 
     def save(self, *args, **kwargs):
         self.manga.save()
@@ -37,15 +43,15 @@ class MangaChapter(models.Model):
 
 class MangaChapterPage(models.Model):
     class Meta:
-        unique_together = ['page_number', 'chapter']
+        unique_together = ['number', 'chapter']
 
-    page_number = models.PositiveIntegerField(verbose_name='Номер страницы')
+    number = models.PositiveIntegerField(verbose_name='Номер страницы')
     chapter = models.ForeignKey('MangaChapter', verbose_name='К какой главе принадлежит страница',
                                 on_delete=models.CASCADE)
     page_image = models.ImageField(verbose_name='Страница')
 
     def __str__(self):
-        return f'{self.chapter.manga.name} Chapter {self.chapter.chapter_number} Page {self.page_number}'
+        return f'{self.chapter.manga.name} Chapter {self.chapter.number} Page {self.number}'
 
 
 class Author(models.Model):

@@ -9,21 +9,32 @@
         <div class="card-header">
             <h3>Последняя манга</h3>
         </div>
-        <div class="card-body row-cols-5">
+        <div class="card-body row-cols-5 d-flex shadow-lg">
             {% for manga in last_5_mangas %}
-                <div class="card m-2" >
-                    <div class="border border-top-0 border-start-0 border-end-0 border-grey" >
-                        <img src="{{ manga.preview.url }}" alt="manga-image" class="card-img ">
-                    </div>
-                    <div class="card-body">
+                <div class="card m-2 shadow-sm" >
+                    <img src="{{ manga.preview.url }}" alt="manga-image" class="card-img-top">
+                    <div class="card-footer  d-flex flex-column justify-content-start">
                         <h5 class="card-title">
                             {{ manga.name }}
                         </h5>
-                            <p class="card-text text-wrap text-truncate" style="height: 100px">
-                                {{ manga.description }}
-                            </p>
-                        <div class="text-end">
-                            <a href="{{ manga.get_absolute_url }}" class="btn btn-primary">Читать мангу</a>
+                        <p class="card-text text-wrap text-truncate" style="height: 50px">
+                            {{ manga.description }}
+                        </p>
+                        <p class="card-text">
+                            {% if manga.release_date == None %}
+                                У этой манги не указана дата релиза.
+                            {% else %}
+                                Вышла: {{ manga.release_date }}
+                            {% endif %}
+                        </p>
+                        <p class="card-text">
+                            Загружена: {{ manga.pub_date }}
+                        </p>
+                        <p class="card-text">
+                            Последнее обновление:  {{ manga.updated_date }}
+                        </p>
+                        <div class="text-end mt-auto">
+                            <a href="{{ manga.get_absolute_url }}" class=" btn btn-primary">Читать мангу</a>
                         </div>
                     </div>
                 </div>
